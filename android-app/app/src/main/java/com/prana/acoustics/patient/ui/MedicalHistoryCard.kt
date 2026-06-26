@@ -2,30 +2,80 @@ package com.prana.acoustics.patient.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun MedicalHistoryCard() {
-    val history = listOf("Diabetes", "Hypertension", "Asthma", "Heart Disease")
-    val selected = remember { mutableStateListOf<String>() }
+    val conditions = listOf(
+        "Diabetes",
+        "Hypertension",
+        "Asthma",
+        "Heart Disease",
+        "Tuberculosis",
+        "Smoking",
+        "Alcohol"
+    )
 
-    Card(shape = RoundedCornerShape(20.dp), modifier = Modifier.fillMaxWidth()) {
+    val selectedConditions = remember { mutableStateListOf<String>() }
+
+    Card(
+        shape = RoundedCornerShape(20.dp),
+        modifier = Modifier.fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(8.dp)
+    ) {
         Column(modifier = Modifier.padding(20.dp)) {
-            Text("🧬 Medical History", style = MaterialTheme.typography.titleLarge)
+            Text(
+                text = "🧬 Medical History",
+                style = MaterialTheme.typography.titleLarge
+            )
 
-            history.forEach { item ->
-                Row {
-                    Checkbox(
-                        checked = selected.contains(item),
-                        onCheckedChange = {
-                            if (it) selected.add(item) else selected.remove(item)
-                        }
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "Select known conditions or lifestyle risks",
+                style = MaterialTheme.typography.bodySmall
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                conditions.forEach { condition ->
+                    val selected = selectedConditions.contains(condition)
+
+                    FilterChip(
+                        selected = selected,
+                        onClick = {
+                            if (selected) {
+                                selectedConditions.remove(condition)
+                            } else {
+                                selectedConditions.add(condition)
+                            }
+                        },
+                        label = { Text(condition) }
                     )
-                    Text(item, modifier = Modifier.padding(top = 12.dp))
                 }
+            }
+
+            if (selectedConditions.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(16.dp))
+
+                AssistChip(
+                    onClick = {},
+                    label = {
+                        Text("${selectedConditions.size} item(s) selected")
+                    }
+                )
             }
         }
     }
