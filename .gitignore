@@ -1,0 +1,10 @@
+.idea/
+*.iml
+.gradle/
+build/
+*/build/
+local.properties
+.DS_Store
+main.py
+android-app/.idea/
+android-app/gradle/gradle-daemon-jvm.properties
